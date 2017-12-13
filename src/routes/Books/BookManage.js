@@ -1,42 +1,55 @@
-import React, { PureComponent } from "react";
-import moment from "moment";
-import { connect } from "dva";
+import React, { PureComponent } from 'react';
+import { connect } from 'dva';
 import {
-  Pagination,
   List,
   Card,
   Row,
   Col,
   Input,
-  Progress,
-  Button,
+  Form,
+  Select,
   Icon,
+  Modal,
   Dropdown,
   Menu,
-  Avatar
-} from "antd";
+} from 'antd';
 
-import PageHeaderLayout from "../../layouts/PageHeaderLayout";
 
-import styles from "./BookManage.less";
-import BookCategory from "./components/BookCategory";
+import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
+import styles from './BookManage.less';
+import BookCategory from './components/BookCategory';
+
+const { Option } = Select;
 const { Search } = Input;
 
 @connect(state => ({
-  list: state.list
+  list: state.list,
 }))
+@Form.create()
 export default class BookManage extends PureComponent {
   componentDidMount() {
     this.props.dispatch({
-      type: "list/fetch",
+      type: 'list/fetch',
       payload: {
-        count: 5
-      }
+        count: 5,
+      },
     });
   }
-
+  state = { visible: false }
+  showModal = () => {
+    this.setState({
+      visible: true,
+    });
+  }
+  handleOk =() => {
+    this.setState({ visible: false });
+  }
+  handleCancel=() => {
+    this.setState({ visible: false });
+  }
   render() {
+    const { getFieldDecorator } = this.props.form;
     const { list: { list, loading } } = this.props;
     const extraContent = (
       <div className={styles.extraContent}>
@@ -53,28 +66,40 @@ export default class BookManage extends PureComponent {
       current: 3,
       pageSize: 5,
       onChange: () => {},
-      total: 50
+      total: 50,
     };
-    const ListContent = ({ data: { owner, createdAt, percent, status } }) => (
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 5 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 16 },
+      },
+    };
+    const ListContent = ({ data }) => (
       <div className={styles.listContent}>
-        <div>
-          <span>Owner</span>
-          <p>{owner}</p>
+        <div style={{ marginLeft: 0 }}>
+          <img src="https://img3.doubanio.com//spic//s1001902.jpg" />
         </div>
         <div>
-          <span>开始时间</span>
-          <p>{moment(createdAt).format("YYYY-MM-DD hh:mm")}</p>
+          <span>小王子</span>
+          <span>郑渊洁</span>
+          <span>人民日报出版社</span>
         </div>
         <div>
-          <Progress percent={percent} status={status} strokeWidth={6} />
+          <span>1号柜三层23</span>
         </div>
+        <div>库存2</div>
+        <div>现存1</div>
       </div>
     );
 
     const menu = (
       <Menu>
         <Menu.Item>
-          <a>编辑</a>
+          <a>记录</a>
         </Menu.Item>
         <Menu.Item>
           <a>删除</a>
@@ -91,6 +116,7 @@ export default class BookManage extends PureComponent {
     );
 
     return (
+
       <PageHeaderLayout>
         <Row gutter={24}>
           <Col
@@ -115,8 +141,8 @@ export default class BookManage extends PureComponent {
             <Card
               className={styles.listCard}
               bordered
-              title="标准列表"
-              bodyStyle={{ padding: "0 32px 40px 32px" }}
+              title="全部图书"
+              bodyStyle={{ padding: '0 32px 40px 32px' }}
               extra={extraContent}
             >
               <List
@@ -126,14 +152,7 @@ export default class BookManage extends PureComponent {
                 pagination={paginationProps}
                 dataSource={list}
                 renderItem={item => (
-                  <List.Item actions={[<a>编辑</a>, <MoreBtn />]}>
-                    <List.Item.Meta
-                      avatar={
-                        <Avatar src={item.logo} shape="square" size="large" />
-                      }
-                      title={<a href={item.href}>{item.title}</a>}
-                      description={item.subDescription}
-                    />
+                  <List.Item actions={[<div onClick={this.showModal}><a>编辑</a></div>, <MoreBtn />]}>
                     <ListContent data={item} />
                   </List.Item>
                 )}
@@ -141,6 +160,51 @@ export default class BookManage extends PureComponent {
             </Card>
           </Col>
         </Row>
+        <Modal
+          title="Basic Modal"
+          wrapClassName={styles.verticalModal}
+          visible={this.state.visible}
+          onOk={this.handleOk}
+          style={{ top: 0 }}
+          onCancel={this.handleCancel}
+        >
+          <Form hideRequiredMark>
+            <Form.Item {...formItemLayout} label="书名">
+              {getFieldDecorator('name2', {
+                    rules: [{ required: true, message: '请输入' }],
+                  })(
+                    <Input placeholder="请输入" />
+                  )}
+            </Form.Item>
+            <Form.Item  {...formItemLayout} label="作者">
+              {getFieldDecorator('url2', {
+                    rules: [{ required: true, message: '请选择' }],
+                  })(
+                    <Input placeholder="请输入" />
+                  )}
+            </Form.Item>
+            <Form.Item  {...formItemLayout} label="分类">
+              {getFieldDecorator('owner2', {
+                    rules: [{ required: true, message: '请选择管理员' }],
+                  })(
+                    <Select placeholder="请选择管理员">
+                      <Option value="xiao">付晓晓</Option>
+                      <Option value="mao">周毛毛</Option>
+                    </Select>
+                  )}
+            </Form.Item>
+            <Form.Item  {...formItemLayout} label="分类">
+              {getFieldDecorator('owner2', {
+                rules: [{ required: true, message: '请选择管理员' }],
+              })(
+                <Select placeholder="请选择管理员">
+                  <Option value="xiao">付晓晓</Option>
+                  <Option value="mao">周毛毛</Option>
+                </Select>
+              )}
+            </Form.Item>
+          </Form>
+        </Modal>
       </PageHeaderLayout>
     );
   }
