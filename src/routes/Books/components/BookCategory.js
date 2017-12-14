@@ -42,6 +42,11 @@ const listData = [
     workId: '传记',
     number: '310',
   },
+  {
+    key: '7',
+    workId: '其他',
+    number: '310',
+  },
 ];
 export default class BookCategory extends Component {
   constructor(props) {
