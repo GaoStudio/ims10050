@@ -1,49 +1,49 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { Layout, Menu, Icon, Avatar, Dropdown, Tag, message, Spin } from "antd";
-import DocumentTitle from "react-document-title";
-import { connect } from "dva";
-import { Link, Route, Redirect, Switch } from "dva/router";
-import moment from "moment";
-import groupBy from "lodash/groupBy";
-import { ContainerQuery } from "react-container-query";
-import classNames from "classnames";
-import Debounce from "lodash-decorators/debounce";
-import HeaderSearch from "../components/HeaderSearch";
-import NoticeIcon from "../components/NoticeIcon";
-import GlobalFooter from "../components/GlobalFooter";
-import NotFound from "../routes/Exception/404";
-import styles from "./BasicLayout.less";
-import logo from "../assets/logo.svg";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Layout, Menu, Icon, Avatar, Dropdown, Tag, message, Spin } from 'antd';
+import DocumentTitle from 'react-document-title';
+import { connect } from 'dva';
+import { Link, Route, Redirect, Switch } from 'dva/router';
+import moment from 'moment';
+import groupBy from 'lodash/groupBy';
+import { ContainerQuery } from 'react-container-query';
+import classNames from 'classnames';
+import Debounce from 'lodash-decorators/debounce';
+import HeaderSearch from '../components/HeaderSearch';
+import NoticeIcon from '../components/NoticeIcon';
+import GlobalFooter from '../components/GlobalFooter';
+import NotFound from '../routes/Exception/404';
+import styles from './BasicLayout.less';
+import logo from '../assets/logo.svg';
 
 const { Header, Sider, Content } = Layout;
 const { SubMenu } = Menu;
 
 const query = {
-  "screen-xs": {
-    maxWidth: 575
+  'screen-xs': {
+    maxWidth: 575,
   },
-  "screen-sm": {
+  'screen-sm': {
     minWidth: 576,
-    maxWidth: 767
+    maxWidth: 767,
   },
-  "screen-md": {
+  'screen-md': {
     minWidth: 768,
-    maxWidth: 991
+    maxWidth: 991,
   },
-  "screen-lg": {
+  'screen-lg': {
     minWidth: 992,
-    maxWidth: 1199
+    maxWidth: 1199,
   },
-  "screen-xl": {
-    minWidth: 1200
-  }
+  'screen-xl': {
+    minWidth: 1200,
+  },
 };
 
 class BasicLayout extends React.PureComponent {
   static childContextTypes = {
     location: PropTypes.object,
-    breadcrumbNameMap: PropTypes.object
+    breadcrumbNameMap: PropTypes.object,
   };
   constructor(props) {
     super(props);
@@ -53,51 +53,51 @@ class BasicLayout extends React.PureComponent {
       []
     );
     this.state = {
-      openKeys: this.getDefaultCollapsedSubMenus(props)
+      openKeys: this.getDefaultCollapsedSubMenus(props),
     };
   }
   getChildContext() {
     const { location, navData, getRouteData } = this.props;
-    const routeData = getRouteData("BasicLayout");
+    const routeData = getRouteData('BasicLayout');
     const firstMenuData = navData.reduce(
       (arr, current) => arr.concat(current.children),
       []
     );
-    const menuData = this.getMenuData(firstMenuData, "");
+    const menuData = this.getMenuData(firstMenuData, '');
     const breadcrumbNameMap = {};
 
-    routeData.concat(menuData).forEach(item => {
+    routeData.concat(menuData).forEach((item) => {
       breadcrumbNameMap[item.path] = {
         name: item.name,
-        component: item.component
+        component: item.component,
       };
     });
     return { location, breadcrumbNameMap };
   }
   componentDidMount() {
     this.props.dispatch({
-      type: "user/fetchCurrent"
+      type: 'user/fetchCurrent',
     });
   }
   componentWillUnmount() {
     this.triggerResizeEvent.cancel();
   }
-  onCollapse = collapsed => {
+  onCollapse = (collapsed) => {
     this.props.dispatch({
-      type: "global/changeLayoutCollapsed",
-      payload: collapsed
+      type: 'global/changeLayoutCollapsed',
+      payload: collapsed,
     });
   };
   onMenuClick = ({ key }) => {
-    if (key === "logout") {
+    if (key === 'logout') {
       this.props.dispatch({
-        type: "login/logout"
+        type: 'login/logout',
       });
     }
   };
   getMenuData = (data, parentPath) => {
     let arr = [];
-    data.forEach(item => {
+    data.forEach((item) => {
       if (item.children) {
         arr.push({ path: `${parentPath}/${item.path}`, name: item.name });
         arr = arr.concat(
@@ -111,31 +111,31 @@ class BasicLayout extends React.PureComponent {
     const currentMenuSelectedKeys = [...this.getCurrentMenuSelectedKeys(props)];
     currentMenuSelectedKeys.splice(-1, 1);
     if (currentMenuSelectedKeys.length === 0) {
-      return ["dashboard"];
+      return ['book'];
     }
     return currentMenuSelectedKeys;
   }
   getCurrentMenuSelectedKeys(props) {
     const { location: { pathname } } = props || this.props;
-    const keys = pathname.split("/").slice(1);
-    if (keys.length === 1 && keys[0] === "") {
+    const keys = pathname.split('/').slice(1);
+    if (keys.length === 1 && keys[0] === '') {
       return [this.menus[0].key];
     }
     return keys;
   }
-  getNavMenuItems(menusData, parentPath = "") {
+  getNavMenuItems(menusData, parentPath = '') {
     if (!menusData) {
       return [];
     }
-    return menusData.map(item => {
+    return menusData.map((item) => {
       if (!item.name) {
         return null;
       }
       let itemPath;
-      if (item.path.indexOf("http") === 0) {
+      if (item.path.indexOf('http') === 0) {
         itemPath = item.path;
       } else {
-        itemPath = `${parentPath}/${item.path || ""}`.replace(/\/+/g, "/");
+        itemPath = `${parentPath}/${item.path || ''}`.replace(/\/+/g, '/');
       }
       if (item.children && item.children.some(child => child.name)) {
         return (
@@ -181,8 +181,8 @@ class BasicLayout extends React.PureComponent {
   getPageTitle() {
     const { location, getRouteData } = this.props;
     const { pathname } = location;
-    let title = "Ant Design Pro";
-    getRouteData("BasicLayout").forEach(item => {
+    let title = 'Ant Design Pro';
+    getRouteData('BasicLayout').forEach((item) => {
       if (item.path === pathname) {
         title = `${item.name} - Ant Design Pro`;
       }
@@ -194,7 +194,7 @@ class BasicLayout extends React.PureComponent {
     if (notices.length === 0) {
       return {};
     }
-    const newNotices = notices.map(notice => {
+    const newNotices = notices.map((notice) => {
       const newNotice = { ...notice };
       if (newNotice.datetime) {
         newNotice.datetime = moment(notice.datetime).fromNow();
@@ -205,10 +205,10 @@ class BasicLayout extends React.PureComponent {
       }
       if (newNotice.extra && newNotice.status) {
         const color = {
-          todo: "",
-          processing: "blue",
-          urgent: "red",
-          doing: "gold"
+          todo: '',
+          processing: 'blue',
+          urgent: 'red',
+          doing: 'gold',
         }[newNotice.status];
         newNotice.extra = (
           <Tag color={color} style={{ marginRight: 0 }}>
@@ -218,44 +218,44 @@ class BasicLayout extends React.PureComponent {
       }
       return newNotice;
     });
-    return groupBy(newNotices, "type");
+    return groupBy(newNotices, 'type');
   }
-  handleOpenChange = openKeys => {
+  handleOpenChange = (openKeys) => {
     const lastOpenKey = openKeys[openKeys.length - 1];
     const isMainMenu = this.menus.some(
       item =>
         lastOpenKey && (item.key === lastOpenKey || item.path === lastOpenKey)
     );
     this.setState({
-      openKeys: isMainMenu ? [lastOpenKey] : [...openKeys]
+      openKeys: isMainMenu ? [lastOpenKey] : [...openKeys],
     });
   };
   toggle = () => {
     const { collapsed } = this.props;
     this.props.dispatch({
-      type: "global/changeLayoutCollapsed",
-      payload: !collapsed
+      type: 'global/changeLayoutCollapsed',
+      payload: !collapsed,
     });
     this.triggerResizeEvent();
   };
   @Debounce(600)
   triggerResizeEvent() {
     // eslint-disable-line
-    const event = document.createEvent("HTMLEvents");
-    event.initEvent("resize", true, false);
+    const event = document.createEvent('HTMLEvents');
+    event.initEvent('resize', true, false);
     window.dispatchEvent(event);
   }
-  handleNoticeClear = type => {
+  handleNoticeClear = (type) => {
     message.success(`清空了${type}`);
     this.props.dispatch({
-      type: "global/clearNotices",
-      payload: type
+      type: 'global/clearNotices',
+      payload: type,
     });
   };
-  handleNoticeVisibleChange = visible => {
+  handleNoticeVisibleChange = (visible) => {
     if (visible) {
       this.props.dispatch({
-        type: "global/fetchNotices"
+        type: 'global/fetchNotices',
       });
     }
   };
@@ -264,7 +264,7 @@ class BasicLayout extends React.PureComponent {
       currentUser,
       collapsed,
       fetchingNotices,
-      getRouteData
+      getRouteData,
     } = this.props;
 
     const menu = (
@@ -291,8 +291,8 @@ class BasicLayout extends React.PureComponent {
     const menuProps = collapsed
       ? {}
       : {
-          openKeys: this.state.openKeys
-        };
+        openKeys: this.state.openKeys,
+      };
 
     const layout = (
       <Layout>
@@ -317,7 +317,7 @@ class BasicLayout extends React.PureComponent {
             {...menuProps}
             onOpenChange={this.handleOpenChange}
             selectedKeys={this.getCurrentMenuSelectedKeys()}
-            style={{ margin: "16px 0", width: "100%" }}
+            style={{ margin: '16px 0', width: '100%' }}
           >
             {this.getNavMenuItems(this.menus)}
           </Menu>
@@ -326,18 +326,18 @@ class BasicLayout extends React.PureComponent {
           <Header className={styles.header}>
             <Icon
               className={styles.trigger}
-              type={collapsed ? "menu-unfold" : "menu-fold"}
+              type={collapsed ? 'menu-unfold' : 'menu-fold'}
               onClick={this.toggle}
             />
             <div className={styles.right}>
               <HeaderSearch
                 className={`${styles.action} ${styles.search}`}
                 placeholder="站内搜索"
-                dataSource={["搜索提示一", "搜索提示二", "搜索提示三"]}
-                onSearch={value => {
+                dataSource={['搜索提示一', '搜索提示二', '搜索提示三']}
+                onSearch={(value) => {
                   console.log("input", value); // eslint-disable-line
                 }}
-                onPressEnter={value => {
+                onPressEnter={(value) => {
                   console.log("enter", value); // eslint-disable-line
                 }}
               />
@@ -353,19 +353,19 @@ class BasicLayout extends React.PureComponent {
                 popupAlign={{ offset: [20, -16] }}
               >
                 <NoticeIcon.Tab
-                  list={noticeData["通知"]}
+                  list={noticeData['通知']}
                   title="通知"
                   emptyText="你已查看所有通知"
                   emptyImage="https://gw.alipayobjects.com/zos/rmsportal/wAhyIChODzsoKIOBHcBk.svg"
                 />
                 <NoticeIcon.Tab
-                  list={noticeData["消息"]}
+                  list={noticeData['消息']}
                   title="消息"
                   emptyText="您已读完所有消息"
                   emptyImage="https://gw.alipayobjects.com/zos/rmsportal/sAuJeJzSKbUmHfBQRzmZ.svg"
                 />
                 <NoticeIcon.Tab
-                  list={noticeData["待办"]}
+                  list={noticeData['待办']}
                   title="待办"
                   emptyText="你已完成所有待办"
                   emptyImage="https://gw.alipayobjects.com/zos/rmsportal/HsIsxMZiWKrNUavQUXqx.svg"
@@ -387,10 +387,10 @@ class BasicLayout extends React.PureComponent {
               )}
             </div>
           </Header>
-          <Content style={{ margin: "24px 24px 0", height: "100%" }}>
-            <div style={{ minHeight: "calc(100vh - 260px)" }}>
+          <Content style={{ margin: '24px 24px 0', height: '100%' }}>
+            <div style={{ minHeight: 'calc(100vh - 260px)' }}>
               <Switch>
-                {getRouteData("BasicLayout").map(item => (
+                {getRouteData('BasicLayout').map(item => (
                   <Route
                     exact={item.exact}
                     key={item.path}
@@ -398,27 +398,27 @@ class BasicLayout extends React.PureComponent {
                     component={item.component}
                   />
                 ))}
-                <Redirect exact from="/" to="/dashboard/analysis" />
+                <Redirect exact from="/" to="/book/books" />
                 <Route component={NotFound} />
               </Switch>
             </div>
             <GlobalFooter
               links={[
                 {
-                  title: "Pro 首页",
-                  href: "http://pro.ant.design",
-                  blankTarget: true
+                  title: 'Pro 首页',
+                  href: 'http://pro.ant.design',
+                  blankTarget: true,
                 },
                 {
-                  title: "GitHub",
-                  href: "https://github.com/ant-design/ant-design-pro",
-                  blankTarget: true
+                  title: 'GitHub',
+                  href: 'https://github.com/ant-design/ant-design-pro',
+                  blankTarget: true,
                 },
                 {
-                  title: "Ant Design",
-                  href: "http://ant.design",
-                  blankTarget: true
-                }
+                  title: 'Ant Design',
+                  href: 'http://ant.design',
+                  blankTarget: true,
+                },
               ]}
               copyright={
                 <div>
@@ -446,5 +446,5 @@ export default connect(state => ({
   currentUser: state.user.currentUser,
   collapsed: state.global.collapsed,
   fetchingNotices: state.global.fetchingNotices,
-  notices: state.global.notices
+  notices: state.global.notices,
 }))(BasicLayout);

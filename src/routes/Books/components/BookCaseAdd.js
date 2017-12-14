@@ -35,7 +35,7 @@ const options = [{
   }],
 }];
 @Form.create()
-export default class BookEditor extends Component {
+export default class BookCaseAdd extends Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
@@ -54,28 +54,14 @@ export default class BookEditor extends Component {
     return (
       <div>
         <Form hideRequiredMark>
-          <Form.Item {...formItemLayout} label="书名">
+          <Form.Item {...formItemLayout} label="名称">
             {getFieldDecorator('name2', {
                     rules: [{ required: true, message: '请输入书名' }],
                   })(
                     <Input placeholder="请输入" />
                   )}
           </Form.Item>
-          <Form.Item {...formItemLayout} label="作者">
-            {getFieldDecorator('url2', {
-                    rules: [{ required: true, message: '请输入作者' }],
-                  })(
-                    <Input placeholder="请输入" />
-                  )}
-          </Form.Item>
-          <Form.Item {...formItemLayout} label="出版者">
-            {getFieldDecorator('url2', {
-              rules: [{ required: true, message: '请输入出版社' }],
-            })(
-              <Input placeholder="请输入" />
-            )}
-          </Form.Item>
-          <Form.Item {...formItemLayout} label="库存">
+          <Form.Item {...formItemLayout} label="层数">
             <Row gutter={2}>
               <Col span={12}>
                 {getFieldDecorator('stock', {
@@ -89,7 +75,7 @@ export default class BookEditor extends Component {
                       rules: [{ required: true, message: '请选择管理员' }],
                     })(
                       <div>
-                        <span className="ant-form-item-label">现存：</span>
+                        <span className="ant-form-item-label">每层最多：</span>
                         <InputNumber min={1} max={10} defaultValue={3} onChange={onChange} />
                       </div>
 
@@ -97,35 +83,16 @@ export default class BookEditor extends Component {
               </Col>
             </Row>
           </Form.Item>
-
-
-          <Form.Item {...formItemLayout} label="分类">
-            {getFieldDecorator('owner2', {
-                    rules: [{ required: true, message: '请选择管理员' }],
-                  })(
-                    <Select placeholder="请选择管理员">
-                      <Option value="xiao">付晓晓</Option>
-                      <Option value="mao">周毛毛</Option>
-                    </Select>
-                  )}
-          </Form.Item>
-          <Form.Item {...formItemLayout} label="书柜">
-            {getFieldDecorator('owner2', {
-                    rules: [{ required: true, message: '请选择管理员' }],
-                  })(
-                    <Cascader defaultValue={['zhejiang', 'hangzhou', 'xihu']} options={options} onChange={onChange} />
-                  )}
-          </Form.Item>
           <Form.Item
             {...formItemLayout}
-            label="目标描述"
+            label="描述"
           >
             {getFieldDecorator('goal', {
               rules: [{
                 required: true, message: '请输入目标描述',
               }],
             })(
-              <TextArea style={{ minHeight: 32 }} placeholder="请输入你的阶段性工作目标" rows={4} />
+              <TextArea style={{ minHeight: 32 }} placeholder="可以写一些位置描述" rows={4} />
             )}
           </Form.Item>
         </Form>

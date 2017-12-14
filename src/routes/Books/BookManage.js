@@ -152,6 +152,7 @@ export default class BookManage extends PureComponent {
           wrapClassName={styles.verticalModal}
           visible={this.state.visible}
           onOk={this.handleOk}
+          width='40%'
           style={{ top: 0 }}
           onCancel={this.handleCancel}
         >
