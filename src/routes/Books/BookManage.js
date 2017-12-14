@@ -6,8 +6,6 @@ import {
   Row,
   Col,
   Input,
-  Form,
-  Select,
   Icon,
   Modal,
   Dropdown,
@@ -19,14 +17,13 @@ import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 import styles from './BookManage.less';
 import BookCategory from './components/BookCategory';
+import BookEditor from './components/BookEditor';
 
-const { Option } = Select;
 const { Search } = Input;
 
 @connect(state => ({
   list: state.list,
 }))
-@Form.create()
 export default class BookManage extends PureComponent {
   componentDidMount() {
     this.props.dispatch({
@@ -49,7 +46,6 @@ export default class BookManage extends PureComponent {
     this.setState({ visible: false });
   }
   render() {
-    const { getFieldDecorator } = this.props.form;
     const { list: { list, loading } } = this.props;
     const extraContent = (
       <div className={styles.extraContent}>
@@ -68,16 +64,7 @@ export default class BookManage extends PureComponent {
       onChange: () => {},
       total: 50,
     };
-    const formItemLayout = {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 5 },
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 16 },
-      },
-    };
+
     const ListContent = ({ data }) => (
       <div className={styles.listContent}>
         <div style={{ marginLeft: 0 }}>
@@ -161,49 +148,14 @@ export default class BookManage extends PureComponent {
           </Col>
         </Row>
         <Modal
-          title="Basic Modal"
+          title="编辑"
           wrapClassName={styles.verticalModal}
           visible={this.state.visible}
           onOk={this.handleOk}
           style={{ top: 0 }}
           onCancel={this.handleCancel}
         >
-          <Form hideRequiredMark>
-            <Form.Item {...formItemLayout} label="书名">
-              {getFieldDecorator('name2', {
-                    rules: [{ required: true, message: '请输入' }],
-                  })(
-                    <Input placeholder="请输入" />
-                  )}
-            </Form.Item>
-            <Form.Item  {...formItemLayout} label="作者">
-              {getFieldDecorator('url2', {
-                    rules: [{ required: true, message: '请选择' }],
-                  })(
-                    <Input placeholder="请输入" />
-                  )}
-            </Form.Item>
-            <Form.Item  {...formItemLayout} label="分类">
-              {getFieldDecorator('owner2', {
-                    rules: [{ required: true, message: '请选择管理员' }],
-                  })(
-                    <Select placeholder="请选择管理员">
-                      <Option value="xiao">付晓晓</Option>
-                      <Option value="mao">周毛毛</Option>
-                    </Select>
-                  )}
-            </Form.Item>
-            <Form.Item  {...formItemLayout} label="分类">
-              {getFieldDecorator('owner2', {
-                rules: [{ required: true, message: '请选择管理员' }],
-              })(
-                <Select placeholder="请选择管理员">
-                  <Option value="xiao">付晓晓</Option>
-                  <Option value="mao">周毛毛</Option>
-                </Select>
-              )}
-            </Form.Item>
-          </Form>
+          <BookEditor />
         </Modal>
       </PageHeaderLayout>
     );
