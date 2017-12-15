@@ -405,7 +405,7 @@ class BasicLayout extends React.PureComponent {
             <GlobalFooter
               links={[
                 {
-                  title: 'Pro 首页',
+                  title: '首页',
                   href: 'http://pro.ant.design',
                   blankTarget: true,
                 },

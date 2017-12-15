@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Tabs } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import BookCase from './components/BookCase';
+import BookSingle from './components/BookSingle';
 
 export default class BookStore extends Component {
   constructor(props) {
@@ -22,6 +23,7 @@ export default class BookStore extends Component {
         page = <BookCase />;
         break;
       case 'single':
+        page = <BookSingle />;
         break;
       case 'series':
         break;
