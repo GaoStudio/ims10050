@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React, { PureComponent } from 'react';
 import {
   Form,
   Input,
@@ -9,60 +9,60 @@ import {
   Button,
   Card,
   InputNumber,
-  Radio
-} from "antd";
-import styles from "../BookStore.less";
+  Radio,
+} from 'antd';
+import styles from '../BookStore.less';
 
 const { Option } = Select;
 const { TextArea } = Input;
 const options = [
   {
-    value: "zhejiang",
-    label: "Zhejiang",
+    value: 'zhejiang',
+    label: 'Zhejiang',
     children: [
       {
-        value: "hangzhou",
-        label: "Hangzhou",
+        value: 'hangzhou',
+        label: 'Hangzhou',
         children: [
           {
-            value: "xihu",
-            label: "West Lake"
-          }
-        ]
-      }
-    ]
+            value: 'xihu',
+            label: 'West Lake',
+          },
+        ],
+      },
+    ],
   },
   {
-    value: "jiangsu",
-    label: "Jiangsu",
+    value: 'jiangsu',
+    label: 'Jiangsu',
     children: [
       {
-        value: "nanjing",
-        label: "Nanjing",
+        value: 'nanjing',
+        label: 'Nanjing',
         children: [
           {
-            value: "zhonghuamen",
-            label: "Zhong Hua Men"
-          }
-        ]
-      }
-    ]
-  }
+            value: 'zhonghuamen',
+            label: 'Zhong Hua Men',
+          },
+        ],
+      },
+    ],
+  },
 ];
 @Form.create()
 export default class BookSeries extends PureComponent {
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         this.props.dispatch({
-          type: "form/submitRegularForm",
-          payload: values
+          type: 'form/submitRegularForm',
+          payload: values,
         });
       }
     });
   };
-  onChange = value => {
+  onChange = (value) => {
     console.log(value);
   };
   render() {
@@ -70,18 +70,18 @@ export default class BookSeries extends PureComponent {
 
     const formItemLayout = {
       labelCol: {
-        span: 8
+        span: 8,
       },
       wrapperCol: {
-        span: 7
-      }
+        span: 7,
+      },
     };
 
     const submitFormLayout = {
       wrapperCol: {
         xs: { span: 20, offset: 0 },
-        sm: { span: 20, offset: 10 }
-      }
+        sm: { span: 20, offset: 10 },
+      },
     };
 
     return (
@@ -94,13 +94,13 @@ export default class BookSeries extends PureComponent {
           <Form.Item {...formItemLayout} label="ISBN">
             <Row gutter={8}>
               <Col span={20}>
-                {getFieldDecorator("title", {
+                {getFieldDecorator('title', {
                   rules: [
                     {
                       required: true,
-                      message: "Please input the captcha you got!"
-                    }
-                  ]
+                      message: 'Please input the captcha you got!',
+                    },
+                  ],
                 })(<Input placeholder="请输入书的ISBN号" />)}
               </Col>
               <Col span={4}>
@@ -111,24 +111,24 @@ export default class BookSeries extends PureComponent {
             </Row>
           </Form.Item>
           <Form.Item {...formItemLayout} label="书名">
-            {getFieldDecorator("client")(<Input placeholder="水浒传" />)}
+            {getFieldDecorator('client')(<Input placeholder="水浒传" />)}
           </Form.Item>
           <Form.Item {...formItemLayout} label="作者">
-            {getFieldDecorator("author")(<Input placeholder="水浒传" />)}
+            {getFieldDecorator('author')(<Input placeholder="水浒传" />)}
           </Form.Item>
           <Form.Item {...formItemLayout} label="出版社">
-            {getFieldDecorator("Press")(<Input placeholder="人民日报出版社" />)}
+            {getFieldDecorator('Press')(<Input placeholder="人民日报出版社" />)}
           </Form.Item>
           <Form.Item {...formItemLayout} label="分类">
             <Row gutter={8}>
               <Col span={12}>
-                {getFieldDecorator("category", {
+                {getFieldDecorator('category', {
                   rules: [
                     {
                       required: true,
-                      message: "Please input the captcha you got!"
-                    }
-                  ]
+                      message: 'Please input the captcha you got!',
+                    },
+                  ],
                 })(<Input placeholder="请输入书的ISBN号" />)}
               </Col>
               <Col span={12}>
@@ -140,9 +140,9 @@ export default class BookSeries extends PureComponent {
             </Row>
           </Form.Item>
           <Form.Item {...formItemLayout} label="位置">
-            {getFieldDecorator("location")(
+            {getFieldDecorator('location')(
               <Cascader
-                defaultValue={["zhejiang", "hangzhou", "xihu"]}
+                defaultValue={['zhejiang', 'hangzhou', 'xihu']}
                 options={options}
                 onChange={this.onChange}
               />
@@ -156,13 +156,13 @@ export default class BookSeries extends PureComponent {
               </span>
             }
           >
-            {getFieldDecorator("goal", {
+            {getFieldDecorator('goal', {
               rules: [
                 {
                   required: true,
-                  message: "请输入目标描述"
-                }
-              ]
+                  message: '请输入目标描述',
+                },
+              ],
             })(
               <TextArea
                 style={{ minHeight: 32 }}
